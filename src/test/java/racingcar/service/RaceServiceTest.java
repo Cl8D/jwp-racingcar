@@ -19,7 +19,6 @@ import java.util.List;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
@@ -46,8 +45,8 @@ class RaceServiceTest {
         final int raceCount = 2;
         final RaceRequest raceRequest = new RaceRequest(testCarNames, raceCount);
 
-        when(raceResultDao.save(anyInt(), any())).thenReturn(1L);
-        doNothing().when(carDao).saveAll(any(), any());
+        when(raceResultDao.save(any())).thenReturn(1L);
+        doNothing().when(carDao).saveAll(any());
 
         // when
         final RaceResponse raceResults = raceService.play(raceRequest);

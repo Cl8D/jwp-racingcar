@@ -25,7 +25,7 @@ class RaceResultJdbcDaoTest {
     @DisplayName("레이싱 결과를 저장한다.")
     public void save() {
         //when
-        final Long savedId = raceResultJdbcDao.save(trialCount, winners);
+        final Long savedId = raceResultJdbcDao.save(RaceEntity.of(trialCount, winners));
 
         //then
         assertThat(savedId).isNotNull();
@@ -35,7 +35,7 @@ class RaceResultJdbcDaoTest {
     @DisplayName("모든 레이싱 결과를 가져온다.")
     public void findAll() {
         //given
-        raceResultJdbcDao.save(trialCount, winners);
+        raceResultJdbcDao.save(RaceEntity.of(trialCount, winners));
 
         //when
         final List<RaceEntity> result = raceResultJdbcDao.findAll();

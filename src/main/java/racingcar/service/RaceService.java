@@ -39,9 +39,10 @@ public class RaceService {
 
         race.run(cars);
         final RaceResponse raceResponse = makeRaceResponse(cars);
-        final Long raceResultId = raceResultDao.save(raceRequest.getCount(), raceResponse.getWinners());
-
-        carDao.saveAll(raceResultId, cars.getCars());
+        final RaceEntity raceEntity = RaceEntity.of(raceRequest.getCount(), raceResponse.getWinners());
+        final Long raceResultId = raceResultDao.save(raceEntity);
+        final List<CarEntity> carEntities = createCarEntities(cars, raceResultId);
+        carDao.saveAll(carEntities);
         return raceResponse;
     }
 
@@ -70,6 +71,12 @@ public class RaceService {
         return cars.getCars()
                 .stream()
                 .map(car -> new CarResponse(car.getName(), car.getPosition()))
+                .collect(Collectors.toUnmodifiableList());
+    }
+
+    private List<CarEntity> createCarEntities(final Cars cars, final Long raceResultId) {
+        return cars.getCars().stream()
+                .map(car -> CarEntity.of(car.getName(), car.getPosition(), raceResultId))
                 .collect(Collectors.toUnmodifiableList());
     }
 

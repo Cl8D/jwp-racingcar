@@ -7,7 +7,7 @@ import java.util.List;
 
 public class RaceResultConsoleDao implements RaceResultDao {
     @Override
-    public Long save(final int trialCount, final String winners) {
+    public Long save(final RaceEntity raceEntity) {
         return null;
     }
 

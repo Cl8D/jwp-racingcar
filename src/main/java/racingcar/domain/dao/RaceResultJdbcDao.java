@@ -22,14 +22,14 @@ public class RaceResultJdbcDao implements RaceResultDao {
     }
 
     @Override
-    public Long save(final int trialCount, final String winners) {
+    public Long save(final RaceEntity raceEntity) {
         final String query = "INSERT INTO race_result (trial_count, winners, created_at) VALUES (?, ?, ?)";
         final KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(con -> {
             final PreparedStatement preparedStatement = con.prepareStatement(query,
                     new String[]{"race_result_id"});
-            preparedStatement.setString(1, String.valueOf(trialCount));
-            preparedStatement.setString(2, winners);
+            preparedStatement.setString(1, String.valueOf(raceEntity.getTrialCount()));
+            preparedStatement.setString(2, raceEntity.getWinners());
             preparedStatement.setString(3, LocalDateTime.now().toString());
             return preparedStatement;
         }, keyHolder);

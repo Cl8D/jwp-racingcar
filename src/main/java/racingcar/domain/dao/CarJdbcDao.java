@@ -3,7 +3,6 @@ package racingcar.domain.dao;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
-import racingcar.domain.Car;
 import racingcar.domain.dao.entity.CarEntity;
 
 import javax.sql.DataSource;
@@ -21,20 +20,20 @@ public class CarJdbcDao implements CarDao {
     }
 
     @Override
-    public void saveAll(final Long raceResultId, final List<Car> cars) {
+    public void saveAll(final List<CarEntity> carEntities) {
         final String query = "INSERT INTO car (name, position, race_result_id) VALUES (?, ?, ?)";
         jdbcTemplate.batchUpdate(query, new BatchPreparedStatementSetter() {
             @Override
             public void setValues(final PreparedStatement ps, final int i) throws SQLException {
-                final Car car = cars.get(i);
-                ps.setString(1, car.getName());
-                ps.setInt(2, car.getPosition());
-                ps.setLong(3, raceResultId);
+                final CarEntity carEntity = carEntities.get(i);
+                ps.setString(1, carEntity.getName());
+                ps.setInt(2, carEntity.getPosition());
+                ps.setLong(3, carEntity.getRaceResultId());
             }
 
             @Override
             public int getBatchSize() {
-                return cars.size();
+                return carEntities.size();
             }
         });
     }

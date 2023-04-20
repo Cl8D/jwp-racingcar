@@ -9,6 +9,7 @@ import racingcar.domain.Car;
 import racingcar.domain.CarName;
 import racingcar.domain.CarPosition;
 import racingcar.domain.dao.entity.CarEntity;
+import racingcar.domain.dao.entity.RaceEntity;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -33,10 +34,11 @@ class CarJdbcDaoTest {
     @DisplayName("차들의 정보를 저장한다")
     public void saveAll() {
         //given
-        final Long raceResultId = raceResultJdbcDao.save(trialCount, winners);
+        final Long raceResultId = raceResultJdbcDao.save(RaceEntity.of(trialCount, winners));
+        final List<CarEntity> carEntities = createCarEntities(raceResultId);
 
         //when
-        carJdbcDao.saveAll(raceResultId, cars);
+        carJdbcDao.saveAll(carEntities);
 
         // then
         final List<CarEntity> result = carJdbcDao.findAll();
@@ -52,8 +54,8 @@ class CarJdbcDaoTest {
     @DisplayName("모든 차 리스트를 반환한다")
     public void findAll() {
         // given
-        final Long raceResultId = raceResultJdbcDao.save(trialCount, winners);
-        carJdbcDao.saveAll(raceResultId, cars);
+        final Long raceResultId = raceResultJdbcDao.save(RaceEntity.of(trialCount, winners));
+        carJdbcDao.saveAll(createCarEntities(raceResultId));
 
         // when
         final List<CarEntity> result = carJdbcDao.findAll();
@@ -64,4 +66,12 @@ class CarJdbcDaoTest {
         assertThat(resultNames)
                 .isEqualTo(List.of("test1", "test2"));
     }
+
+    private List<CarEntity> createCarEntities(final Long raceResultId) {
+        return cars.stream()
+                .map(car -> CarEntity.of(car.getName(), car.getPosition(), raceResultId))
+                .collect(Collectors.toUnmodifiableList());
+    }
+
+
 }
