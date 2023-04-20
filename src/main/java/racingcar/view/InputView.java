@@ -3,14 +3,11 @@ package racingcar.view;
 import racingcar.common.exception.DuplicateResourceException;
 import racingcar.common.exception.ResourceLengthException;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.Scanner;
 import java.util.function.Supplier;
 
 public class InputView {
 
-    private static final String CAR_NAME_DELIMITER = ",";
     private static final Scanner scanner = new Scanner(System.in);
 
     public static <T> T getUserInput(Supplier<T> inputReader) {
@@ -28,10 +25,10 @@ public class InputView {
         }
     }
 
-    public static List<String> getCarNames() {
+    public static String getCarNames() {
         return getUserInput(() -> {
             OutputView.printMessage("경주할 자동차 이름을 입력하세요(이름은 쉼표(,)를 기준으로 구분).");
-            return Arrays.asList(readConsole().split(CAR_NAME_DELIMITER));
+            return readConsole();
         });
     }
 

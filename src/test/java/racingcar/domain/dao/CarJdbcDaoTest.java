@@ -17,7 +17,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @SpringBootTest
 @Transactional
-class CarDaoTest {
+class CarJdbcDaoTest {
 
     private static final List<Car> cars = List.of(new Car(CarName.create("test1"),
             CarPosition.init()), new Car(CarName.create("test2"), CarPosition.init()));
@@ -25,21 +25,21 @@ class CarDaoTest {
     private static final String winners = "test1,test2";
 
     @Autowired
-    private CarDao carDao;
+    private CarJdbcDao carJdbcDao;
     @Autowired
-    private RaceResultDao raceResultDao;
+    private RaceResultJdbcDao raceResultJdbcDao;
 
     @Test
     @DisplayName("차들의 정보를 저장한다")
     public void saveAll() {
         //given
-        final Long raceResultId = raceResultDao.save(trialCount, winners);
+        final Long raceResultId = raceResultJdbcDao.save(trialCount, winners);
 
         //when
-        carDao.saveAll(raceResultId, cars);
+        carJdbcDao.saveAll(raceResultId, cars);
 
         // then
-        final List<CarEntity> result = carDao.findAll(raceResultId);
+        final List<CarEntity> result = carJdbcDao.findAll(raceResultId);
         final List<String> resultNames = result.stream().map(CarEntity::getName)
                 .collect(Collectors.toUnmodifiableList());
 
@@ -52,11 +52,11 @@ class CarDaoTest {
     @DisplayName("모든 차 리스트를 반환한다")
     public void findAll() {
         // given
-        final Long raceResultId = raceResultDao.save(trialCount, winners);
-        carDao.saveAll(raceResultId, cars);
+        final Long raceResultId = raceResultJdbcDao.save(trialCount, winners);
+        carJdbcDao.saveAll(raceResultId, cars);
 
         // when
-        final List<CarEntity> result = carDao.findAll(raceResultId);
+        final List<CarEntity> result = carJdbcDao.findAll(raceResultId);
         final List<String> resultNames = result.stream().map(CarEntity::getName)
                 .collect(Collectors.toUnmodifiableList());
 

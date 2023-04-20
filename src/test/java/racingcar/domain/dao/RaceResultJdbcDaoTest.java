@@ -13,19 +13,19 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @Transactional
-class RaceResultDaoTest {
+class RaceResultJdbcDaoTest {
 
     private static final int trialCount = 10;
     private static final String winners = "test1,test2";
 
     @Autowired
-    private RaceResultDao raceResultDao;
+    private RaceResultJdbcDao raceResultJdbcDao;
 
     @Test
     @DisplayName("레이싱 결과를 저장한다.")
     public void save() {
         //when
-        final Long savedId = raceResultDao.save(trialCount, winners);
+        final Long savedId = raceResultJdbcDao.save(trialCount, winners);
 
         //then
         assertThat(savedId).isNotNull();
@@ -35,10 +35,10 @@ class RaceResultDaoTest {
     @DisplayName("모든 레이싱 결과를 가져온다.")
     public void findAll() {
         //given
-        raceResultDao.save(trialCount, winners);
+        raceResultJdbcDao.save(trialCount, winners);
 
         //when
-        final List<RaceEntity> result = raceResultDao.findAll();
+        final List<RaceEntity> result = raceResultJdbcDao.findAll();
 
         //then
         assertThat(result.size()).isEqualTo(1);

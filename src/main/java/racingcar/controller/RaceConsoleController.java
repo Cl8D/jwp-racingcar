@@ -1,8 +1,9 @@
 package racingcar.controller;
 
-import racingcar.domain.Cars;
-import racingcar.domain.NumberGenerator;
-import racingcar.domain.Race;
+import racingcar.dto.CarResponse;
+import racingcar.dto.RaceRequest;
+import racingcar.dto.RaceResponse;
+import racingcar.service.RaceService;
 import racingcar.view.InputView;
 import racingcar.view.OutputView;
 
@@ -10,37 +11,33 @@ import java.util.List;
 
 public class RaceConsoleController {
 
-    private final NumberGenerator numberGenerator;
+    private final RaceService raceService;
 
-    public RaceConsoleController(final NumberGenerator numberGenerator) {
-        this.numberGenerator = numberGenerator;
+    public RaceConsoleController(final RaceService raceService) {
+        this.raceService = raceService;
     }
 
     public void race() {
-        final Cars cars = createCars();
-        final Race race = createRace();
-        race.run(cars);
-        printRaceResult(cars);
+        final String carNames = getCarNames();
+        final int tryCount = getTryCount();
+        final RaceRequest raceRequest = new RaceRequest(carNames, tryCount);
+        final RaceResponse raceResponse = raceService.play(raceRequest);
+        printRaceResult(raceResponse);
     }
 
-    private Cars createCars() {
-        return InputView.getUserInput(() -> {
-            final List<String> carNames = InputView.getCarNames();
-            return Cars.create(carNames, numberGenerator);
-        });
+    private String getCarNames() {
+        return InputView.getUserInput(InputView::getCarNames);
     }
 
-    private static Race createRace() {
-        return InputView.getUserInput(() -> {
-            final int tryCount = InputView.getTryCount();
-            return new Race(tryCount);
-        });
+    private static int getTryCount() {
+        return InputView.getUserInput(InputView::getTryCount);
     }
 
-    private void printRaceResult(final Cars cars) {
-        final List<String> winners = cars.getWinnerCarNames();
+    private void printRaceResult(final RaceResponse raceResponse) {
+        final String winners = raceResponse.getWinners();
         OutputView.printWinnersResult(winners);
-        cars.getCars()
+        final List<CarResponse> racingCars = raceResponse.getRacingCars();
+        racingCars
                 .forEach(car -> OutputView.printCarStatus(car.getName(), car.getPosition()));
     }
 }
