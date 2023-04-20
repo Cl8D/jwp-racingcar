@@ -7,5 +7,6 @@ import java.util.List;
 
 public interface CarDao {
     void saveAll(final Long raceResultId, final List<Car> cars);
-    List<CarEntity> findAll(final Long resultId);
+
+    List<CarEntity> findAll();
 }

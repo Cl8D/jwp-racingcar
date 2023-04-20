@@ -40,10 +40,10 @@ public class CarJdbcDao implements CarDao {
     }
 
     @Override
-    public List<CarEntity> findAll(final Long resultId) {
-        final String query = "SELECT * FROM car WHERE race_result_id = ?";
+    public List<CarEntity> findAll() {
+        final String query = "SELECT * FROM car";
         return jdbcTemplate.query(query, (result, count) ->
                 new CarEntity(result.getLong("car_id"), result.getString("name"),
-                        result.getInt("position")), resultId);
+                        result.getInt("position"), result.getLong("race_result_id")));
     }
 }

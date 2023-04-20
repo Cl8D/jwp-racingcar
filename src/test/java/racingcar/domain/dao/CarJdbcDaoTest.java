@@ -39,7 +39,7 @@ class CarJdbcDaoTest {
         carJdbcDao.saveAll(raceResultId, cars);
 
         // then
-        final List<CarEntity> result = carJdbcDao.findAll(raceResultId);
+        final List<CarEntity> result = carJdbcDao.findAll();
         final List<String> resultNames = result.stream().map(CarEntity::getName)
                 .collect(Collectors.toUnmodifiableList());
 
@@ -56,7 +56,7 @@ class CarJdbcDaoTest {
         carJdbcDao.saveAll(raceResultId, cars);
 
         // when
-        final List<CarEntity> result = carJdbcDao.findAll(raceResultId);
+        final List<CarEntity> result = carJdbcDao.findAll();
         final List<String> resultNames = result.stream().map(CarEntity::getName)
                 .collect(Collectors.toUnmodifiableList());
 

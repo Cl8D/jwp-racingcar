@@ -6,9 +6,7 @@ import racingcar.domain.Cars;
 import racingcar.domain.NumberGenerator;
 import racingcar.domain.Race;
 import racingcar.domain.dao.CarDao;
-import racingcar.domain.dao.CarJdbcDao;
 import racingcar.domain.dao.RaceResultDao;
-import racingcar.domain.dao.RaceResultJdbcDao;
 import racingcar.domain.dao.entity.CarEntity;
 import racingcar.domain.dao.entity.RaceEntity;
 import racingcar.dto.CarResponse;
@@ -16,6 +14,7 @@ import racingcar.dto.RaceRequest;
 import racingcar.dto.RaceResponse;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -48,10 +47,14 @@ public class RaceService {
 
     public List<RaceResponse> getRaceResult() {
         final List<RaceEntity> raceEntities = raceResultDao.findAll();
+        final List<CarEntity> carEntities = carDao.findAll();
+        final Map<Long, List<CarEntity>> carEntitiesByRaceResultId = carEntities.stream()
+                .collect(Collectors.groupingBy(CarEntity::getRaceResultId));
+
         return raceEntities.stream()
                 .map(raceEntity -> {
-                    final List<CarEntity> carEntities = carDao.findAll(raceEntity.getId());
-                    final List<CarResponse> carResponses = makeCarRaceResult(carEntities);
+                    final List<CarEntity> targetCarEntities = carEntitiesByRaceResultId.get(raceEntity.getId());
+                    final List<CarResponse> carResponses = makeCarRaceResult(targetCarEntities);
                     return RaceResponse.create(raceEntity.getWinners(), carResponses);
                 })
                 .collect(Collectors.toUnmodifiableList());

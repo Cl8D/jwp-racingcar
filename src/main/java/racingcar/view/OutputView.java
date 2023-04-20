@@ -1,7 +1,5 @@
 package racingcar.view;
 
-import java.util.List;
-
 public class OutputView {
 
     private static final String WINNER_MESSAGE_FORMAT = "우승자: %s";

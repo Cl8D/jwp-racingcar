@@ -66,9 +66,9 @@ class RaceServiceTest {
         final List<RaceResponse> expected = List.of(RaceResponse.create("pobi",
                 List.of(new CarResponse("pobi", 10))));
         when(raceResultDao.findAll()).thenReturn(List.of(new RaceEntity(1L, 10, "pobi")));
-        when(carDao.findAll(any())).thenReturn(List.of(new CarEntity(1L, "pobi", 10),
-                new CarEntity(2L, "crong", 5),
-                new CarEntity(3L, "honux", 3)));
+        when(carDao.findAll()).thenReturn(List.of(new CarEntity(1L, "pobi", 10, 1L),
+                new CarEntity(2L, "crong", 5, 1L),
+                new CarEntity(3L, "honux", 3, 1L)));
 
         // when
         final List<RaceResponse> actual = raceService.getRaceResult();
