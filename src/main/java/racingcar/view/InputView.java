@@ -15,14 +15,14 @@ public class InputView {
             return inputReader.get();
         } catch (DuplicateResourceException e) {
             OutputView.printMessage("중복된 값을 입력할 수 없습니다.");
-            return getUserInput(inputReader);
         } catch (ResourceLengthException e) {
             OutputView.printMessage(String.format("최대 %d글자까지 입력할 수 있습니다.", e.getLength().getData()));
-            return getUserInput(inputReader);
+        } catch (NumberFormatException e) {
+            OutputView.printMessage("숫자를 입력해 주세요.");
         } catch (IllegalArgumentException e) {
             OutputView.printMessage(e.getMessage());
-            return getUserInput(inputReader);
         }
+        return getUserInput(inputReader);
     }
 
     public static String getCarNames() {
